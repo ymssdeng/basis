@@ -1,0 +1,13 @@
+<configurations>
+
+	<bean id="noShardFunc" class="com.bj58.oceanus.core.shard.Function.NoShardFunction" />
+	
+	<table name="t_app_apps" differ-name="false" shard-type="NO_SHARD" threadpool="default">
+		<namenodes>
+			<namenode ref="zhushou_source" tablename="t_app_apps"/>
+		</namenodes>
+		
+		<function ref="noShardFunc" />
+	</table>
+							
+</configurations>

@@ -1,0 +1,8 @@
+<configurations>
+
+	<namenode id="zhushou_source" loadbalance="">
+		<datanodes>
+			<datanode ref="zhushou_db" access-mode="READ-WRITE" weight="10" />
+		</datanodes>
+	</namenode> 
+</configurations>
