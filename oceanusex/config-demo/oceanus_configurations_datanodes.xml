@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations>
+  
+	<datanode id="zhushou_db">
+		<url>
+		<![CDATA[
+		jdbc:mysql://localhost:3306/db?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+		]]>
+		</url>
+		<username></username>
+		<password></password>
+		<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+		<initialSize>10</initialSize>
+		<maxActive>50</maxActive>
+		<maxWait>5000</maxWait>
+		<maxIdle>5</maxIdle>		
+		<minIdle>5</minIdle>
+	</datanode>
+</configurations>
