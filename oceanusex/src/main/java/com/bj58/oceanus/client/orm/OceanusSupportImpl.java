@@ -8,16 +8,16 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import com.bj58.seo.oceanusex.dal.AutoIncrementId;
-import com.bj58.seo.oceanusex.dal.DBField;
-import com.bj58.seo.oceanusex.dal.OceanusEntity;
-import com.bj58.seo.oceanusex.dal.OceanusResult;
-import com.bj58.seo.oceanusex.dal.Pagination;
-import com.bj58.seo.oceanusex.exceptions.OceanusDuplicateException;
-import com.bj58.seo.oceanusex.exceptions.OceanusNotFoundException;
-import com.bj58.seo.oceanusex.exceptions.OceanusSqlException;
-import com.bj58.seo.oceanusex.orm.OceanusSupport;
 import com.google.common.collect.Lists;
+import com.mdeng.oceanusex.dal.AutoIncrementId;
+import com.mdeng.oceanusex.dal.DBField;
+import com.mdeng.oceanusex.dal.OceanusEntity;
+import com.mdeng.oceanusex.dal.OceanusResult;
+import com.mdeng.oceanusex.dal.Pagination;
+import com.mdeng.oceanusex.exceptions.OceanusDuplicateException;
+import com.mdeng.oceanusex.exceptions.OceanusNotFoundException;
+import com.mdeng.oceanusex.exceptions.OceanusSqlException;
+import com.mdeng.oceanusex.orm.OceanusSupport;
 
 /**
  * Base database access service
