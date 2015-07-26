@@ -1,9 +1,6 @@
-package com.ymssdeng.basis.helper.dataimport;
+package com.ymssdeng.basis.helper.impt;
 
 import java.io.File;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 抽象导入器
@@ -12,7 +9,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class AbstractImporter {
-  protected Logger logger = LoggerFactory.getLogger(this.getClass());
   protected File[] files;
 
   /**

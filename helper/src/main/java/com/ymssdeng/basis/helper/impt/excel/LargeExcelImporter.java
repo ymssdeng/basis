@@ -1,4 +1,4 @@
-package com.ymssdeng.basis.helper.dataimport.excel;
+package com.ymssdeng.basis.helper.impt.excel;
 
 import java.io.File;
 import java.io.InputStream;
@@ -20,8 +20,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
-import com.ymssdeng.basis.helper.dal.IEntity;
-import com.ymssdeng.basis.helper.dataimport.AbstractImporter;
+import com.ymssdeng.basis.helper.impt.AbstractImporter;
+import com.ymssdeng.basis.helper.impt.IEntity;
 
 /**
  * 处理较大的Excel(>10MB)
@@ -87,9 +87,10 @@ public class LargeExcelImporter extends AbstractImporter {
           parser.parse(sheetSource);
           sheet.close();
         }
-        logger.info("{} completed.", file.getName());
+        System.out.println(String.format("%s completed.", file.getName()));
       } catch (Exception e) {
-        logger.error("{} process failed.", file.getName(), e);
+        System.out.println(String.format("%s process failed.", file.getName()));
+        e.printStackTrace();
       }
 
     }

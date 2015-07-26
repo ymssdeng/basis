@@ -1,4 +1,4 @@
-package com.ymssdeng.basis.helper.dataimport.excel;
+package com.ymssdeng.basis.helper.impt.excel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +10,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.google.common.base.Function;
-import com.ymssdeng.basis.helper.dal.IEntity;
-import com.ymssdeng.basis.helper.dataimport.AbstractImporter;
+import com.ymssdeng.basis.helper.impt.AbstractImporter;
+import com.ymssdeng.basis.helper.impt.IEntity;
 
 /**
  * 处理较小的Excel
@@ -59,9 +59,10 @@ public class SmallExcelImporter extends AbstractImporter {
           function.apply(row);
         }
 
-        logger.info("{} completed.", file.getName());
+        System.out.println(String.format("%s completed.", file.getName()));
       } catch (Exception e) {
-        logger.error("{} process failed.", file.getName(), e);
+    	  System.out.println(String.format("%s process failed.", file.getName()));
+    	  e.printStackTrace();
       }
     }
   }

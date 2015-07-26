@@ -1,4 +1,4 @@
-package com.ymssdeng.basis.helper.dal;
+package com.ymssdeng.basis.helper.impt;
 
 /**
  * A flag interface

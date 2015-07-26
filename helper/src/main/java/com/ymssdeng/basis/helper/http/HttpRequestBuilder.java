@@ -9,8 +9,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * To build a HTTP request.
@@ -19,7 +17,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class HttpRequestBuilder {
-  private static Logger logger = LoggerFactory.getLogger(HttpRequestBuilder.class);
   private CloseableHttpClient httpclient;
   private HttpRequestBase method;
   private RequestConfig config;
@@ -72,7 +69,7 @@ public class HttpRequestBuilder {
         else
           EntityUtils.consume(response.getEntity());
       } catch (Exception ex) {
-        logger.error("{} time for: {}", i + 1, ex.getMessage());
+    	  //ignore
       } finally {
         if (method != null) method.releaseConnection();
       }

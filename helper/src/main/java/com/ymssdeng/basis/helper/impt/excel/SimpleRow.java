@@ -1,4 +1,4 @@
-package com.ymssdeng.basis.helper.dataimport.excel;
+package com.ymssdeng.basis.helper.impt.excel;
 
 public interface SimpleRow {
 

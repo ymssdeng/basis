@@ -7,10 +7,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.junit.Test;
 
 import com.google.common.base.Function;
-import com.ymssdeng.basis.helper.dal.IEntity;
-import com.ymssdeng.basis.helper.dataimport.excel.LargeExcelImporter;
-import com.ymssdeng.basis.helper.dataimport.excel.SimpleRow;
-import com.ymssdeng.basis.helper.dataimport.excel.SmallExcelImporter;
+import com.ymssdeng.basis.helper.impt.IEntity;
+import com.ymssdeng.basis.helper.impt.excel.LargeExcelImporter;
+import com.ymssdeng.basis.helper.impt.excel.SimpleRow;
+import com.ymssdeng.basis.helper.impt.excel.SmallExcelImporter;
 
 public class ExcelImporterTest {
 

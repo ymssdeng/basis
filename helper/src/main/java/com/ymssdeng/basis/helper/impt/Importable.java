@@ -1,15 +1,12 @@
-package com.ymssdeng.basis.helper.dataimport;
+package com.ymssdeng.basis.helper.impt;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
-import com.ymssdeng.basis.helper.dal.IEntity;
 import com.ymssdeng.basis.helper.utils.Charsets;
 
 /**
@@ -20,8 +17,6 @@ import com.ymssdeng.basis.helper.utils.Charsets;
  * @param <T>
  */
 public abstract class Importable<T extends IEntity> {
-
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
   protected boolean removeHtml;
 
   /**
@@ -53,7 +48,7 @@ public abstract class Importable<T extends IEntity> {
         }
       }
     } catch (Exception e) {
-      logger.error("failed at preprocess.", e);
+      e.printStackTrace();
       return false;
     }
     return true;
