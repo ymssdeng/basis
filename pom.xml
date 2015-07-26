@@ -200,4 +200,9 @@
 			</plugin>
 		</plugins>
 	</build>
+	<modules>
+		<module>helper</module>
+		<module>oceanusex</module>
+		<module>quiz</module>
+	</modules>
 </project>
