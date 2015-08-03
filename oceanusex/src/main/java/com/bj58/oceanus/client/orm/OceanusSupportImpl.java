@@ -8,12 +8,13 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.mdeng.oceanusex.dal.AutoIncrementId;
 import com.mdeng.oceanusex.dal.DBField;
 import com.mdeng.oceanusex.dal.OceanusEntity;
 import com.mdeng.oceanusex.dal.OceanusResult;
 import com.mdeng.oceanusex.dal.Pagination;
+import com.mdeng.oceanusex.dal.RowKey;
 import com.mdeng.oceanusex.exceptions.OceanusDuplicateException;
 import com.mdeng.oceanusex.exceptions.OceanusNotFoundException;
 import com.mdeng.oceanusex.exceptions.OceanusSqlException;
@@ -44,7 +45,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
    * @throws Exception
    */
   public T getById(Object id) throws Exception {
-    return single(String.format("%s=?", getAutoIncrementFieldName()), id);
+    return single(String.format("%s=?", getRowKeyFieldName()), id);
   }
 
   /**
@@ -58,7 +59,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
   public List<T> getById(Object[] id) throws Exception {
     checkNotNull(id, "id can not be null");
     checkArgument(id.length > 0, "id length is 0");
-    StringBuilder where = new StringBuilder(getAutoIncrementFieldName() + " in (");
+    StringBuilder where = new StringBuilder(getRowKeyFieldName() + " in (");
     for (Object object : id) {
       where.append("?,");
     }
@@ -161,7 +162,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     String sql = OceanusSqlBuilder.instance(clazz).update(t, fields).build();
 
     List<Object> params = Lists.newArrayList((getFieldsValues(t, fields)));
-    params.add(getAutoIncrementFieldValue(t));
+    params.add(getRowKeyFieldValue(t));
     excuteUpdate(sql, params.toArray());
   }
 
@@ -173,7 +174,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
    */
   public void delete(Object key) throws Exception {
     checkNotNull(key, "key can not be null");
-    delete(String.format("%s=?", getAutoIncrementFieldName()), key);
+    delete(String.format("%s=?", getRowKeyFieldName()), key);
   }
 
   /**
@@ -227,9 +228,11 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     String sql = OceanusSqlBuilder.instance(clazz).select().where(where).build();
     List<T> lst = excuteQuery(clazz, sql, values);
     if (lst.size() == 0) {
-      throw new OceanusNotFoundException("Expected single but 0 found");
+    	String msg = String.format("Expected 1 but 0 found, where:%s,values:%s", where, Joiner.on(',').join(values));
+      throw new OceanusNotFoundException(msg);
     } else if (lst.size() >= 2) {
-      throw new OceanusDuplicateException("Expected single but " + lst.size() + " found");
+    	String msg = String.format("Expected 1 but %d found, where:%s,values:%s", lst.size(), where, Joiner.on(',').join(values));
+    	throw new OceanusDuplicateException(msg);
     }
 
     return lst.get(0);
@@ -251,13 +254,13 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
   protected Object[] getFieldsValues(T t, String... fieldNames) throws IllegalAccessException,
       InvocationTargetException {
     List<String> tmp = null;
-    if (fieldNames != null) tmp = Arrays.asList(fieldNames);
+    if (fieldNames != null && fieldNames.length > 0) tmp = Arrays.asList(fieldNames);
 
     List<Object> params = Lists.newArrayList();
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
       String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
       if (name != null
-          && !(name.equalsIgnoreCase("id") || field.isAnnotationPresent(AutoIncrementId.class))) {
+          && !(name.equalsIgnoreCase("id") || field.isAnnotationPresent(RowKey.class))) {
         if (tmp != null && !tmp.contains(name)) continue;
         // 约定不更新或插入Id
         Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
@@ -267,9 +270,9 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     return params.toArray();
   }
 
-  private String getAutoIncrementFieldName() throws Exception {
+  private String getRowKeyFieldName() throws Exception {
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
-      if (field.isAnnotationPresent(AutoIncrementId.class)) {
+      if (field.isAnnotationPresent(RowKey.class)) {
         return field.getName();
       }
     }
@@ -283,9 +286,9 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     throw new OceanusSqlException("can not find identity column");
   }
 
-  private Object getAutoIncrementFieldValue(T t) throws Exception {
+  private Object getRowKeyFieldValue(T t) throws Exception {
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
-      if (field.isAnnotationPresent(AutoIncrementId.class)) {
+      if (field.isAnnotationPresent(RowKey.class)) {
         Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
         return method.invoke(t);
       }

@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.mdeng.oceanusex.dal.AutoIncrementId;
 import com.mdeng.oceanusex.dal.Pagination;
+import com.mdeng.oceanusex.dal.RowKey;
 import com.mdeng.oceanusex.dal.Table;
 
 /**
@@ -23,7 +23,7 @@ public class OceanusSqlBuilder {
 
   private StringBuilder builder = new StringBuilder();
   private String tableName;
-  private String autoIncrementFieldName;
+  private String rowReyFieldName;
   private List<String> names = Lists.newArrayList();
   private static Logger log = LoggerFactory.getLogger(OceanusSqlBuilder.class);
 
@@ -39,17 +39,17 @@ public class OceanusSqlBuilder {
       String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
       // 约定不更新或插入Id
       if (name != null
-          && !(name.equalsIgnoreCase("id") || field.isAnnotationPresent(AutoIncrementId.class))) {
+          && !(name.equalsIgnoreCase("id") || field.isAnnotationPresent(RowKey.class))) {
         names.add(name);
       }
     }
 
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
-      if (field.isAnnotationPresent(AutoIncrementId.class)) {
-        autoIncrementFieldName = field.getName();
+      if (field.isAnnotationPresent(RowKey.class)) {
+        rowReyFieldName = field.getName();
       }
     }
-    if (autoIncrementFieldName == null) autoIncrementFieldName = "id"; // default
+    if (rowReyFieldName == null) rowReyFieldName = "id"; // default
   }
 
   public static <T> OceanusSqlBuilder instance(Class<T> clazz) {
@@ -118,7 +118,7 @@ public class OceanusSqlBuilder {
       }
     }
     // where
-    builder.append(" where ").append(autoIncrementFieldName).append("=?");
+    builder.append(" where ").append(rowReyFieldName).append("=?");
     builder.append(' ');
     return this;
   }
