@@ -77,15 +77,15 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
    * @throws Exception
    */
   public int count(DBField... fields) throws Exception {
-    String where = "1=1 ";
+    StringBuilder where = new StringBuilder("1=1 ");
     if (fields != null) {
       for (DBField field : fields) {
-        where += "and " + field.getName() + "=? ";
+    	  where.append("and ").append(field.getName()).append("=? ");
       }
-      return count(where, DBField.values(Arrays.asList(fields)));
+      return count(where.toString(), DBField.values(Arrays.asList(fields)));
     }
 
-    return count(where);
+    return count(where.toString());
   }
 
   /**
@@ -99,20 +99,23 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
    */
   public OceanusResult<T> getByFields(Pagination pgn, DBField... fields) throws Exception {
     checkNotNull(fields, "fields can not be null");
-    String where = "1=1 ";
+    StringBuilder where = new StringBuilder("1=1 ");
     for (DBField field : fields) {
-      where += "and " + field.getName() + "=? ";
+    	where.append("and ").append(field.getName()).append("=? ");
     }
-    return pagination(where, pgn, DBField.values(Arrays.asList(fields)));
+    return pagination(where.toString(), pgn, DBField.values(Arrays.asList(fields)));
   }
 
+  /**
+   * Get by fields, return single value
+   */
   public T getByFields(DBField... fields) throws Exception {
     checkNotNull(fields, "fields can not be null");
-    String where = "1=1 ";
+    StringBuilder where = new StringBuilder("1=1 ");
     for (DBField field : fields) {
-      where += "and " + field.getName() + "=? ";
+    	where.append("and ").append(field.getName()).append("=? ");
     }
-    return single(where, DBField.values(Arrays.asList(fields)));
+    return single(where.toString(), DBField.values(Arrays.asList(fields)));
   }
 
   /**
