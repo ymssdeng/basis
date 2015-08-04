@@ -10,6 +10,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import com.google.common.base.Preconditions;
+
 /**
  * To build a HTTP request.
  * 
@@ -20,7 +22,6 @@ public class HttpRequestBuilder {
   private CloseableHttpClient httpclient;
   private HttpRequestBase method;
   private RequestConfig config;
-  private int retries = 1;
 
   HttpRequestBuilder() {
     httpclient = HttpClients.createDefault();
@@ -50,30 +51,26 @@ public class HttpRequestBuilder {
     return this;
   }
 
-  public HttpRequestBuilder retries(int retries) {
-    this.retries = retries;
-    return this;
-  }
-
-  public void execute() {
+  public void execute() throws Exception {
     execute(null);
   }
 
-  public <T> T execute(ResponseHandler<T> handler) {
-    for (int i = 0; i < retries; i++) {
-      try {
-        if (config != null) method.setConfig(config);
-        CloseableHttpResponse response = httpclient.execute(method);
-        if (handler != null)
-          return handler.handleResponse(response);
-        else
-          EntityUtils.consume(response.getEntity());
-      } catch (Exception ex) {
-    	  //ignore
-      } finally {
-        if (method != null) method.releaseConnection();
+  public <T> T execute(ResponseHandler<T> handler) throws Exception {
+    Preconditions.checkNotNull(method, "you have not set http method yet");
+
+    try {
+      if (config != null) method.setConfig(config);
+      CloseableHttpResponse response = httpclient.execute(method);
+      if (handler != null) {
+        return handler.handleResponse(response);
+      } else {
+        EntityUtils.consume(response.getEntity());
       }
+    } finally {
+      method.releaseConnection();
+      httpclient.close();
     }
+
     return null;
   }
 
