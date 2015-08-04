@@ -1,4 +1,5 @@
 package com.bj58.oceanus.client.orm;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -77,15 +78,12 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
    * @throws Exception
    */
   public int count(DBField... fields) throws Exception {
+    checkNotNull(fields, "fields can not be null");
     StringBuilder where = new StringBuilder("1=1 ");
-    if (fields != null) {
-      for (DBField field : fields) {
-    	  where.append("and ").append(field.getName()).append("=? ");
-      }
-      return count(where.toString(), DBField.values(Arrays.asList(fields)));
+    for (DBField field : fields) {
+      where.append("and ").append(field.getName()).append("=? ");
     }
-
-    return count(where.toString());
+    return count(where.toString(), DBField.values(Arrays.asList(fields)));
   }
 
   /**
@@ -101,7 +99,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     checkNotNull(fields, "fields can not be null");
     StringBuilder where = new StringBuilder("1=1 ");
     for (DBField field : fields) {
-    	where.append("and ").append(field.getName()).append("=? ");
+      where.append("and ").append(field.getName()).append("=? ");
     }
     return pagination(where.toString(), pgn, DBField.values(Arrays.asList(fields)));
   }
@@ -113,7 +111,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     checkNotNull(fields, "fields can not be null");
     StringBuilder where = new StringBuilder("1=1 ");
     for (DBField field : fields) {
-    	where.append("and ").append(field.getName()).append("=? ");
+      where.append("and ").append(field.getName()).append("=? ");
     }
     return single(where.toString(), DBField.values(Arrays.asList(fields)));
   }
@@ -162,6 +160,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
    */
   public void update(T t, String... fields) throws Exception {
     checkNotNull(t, "t can not be null");
+    checkNotNull(fields, "fields can not be null");
     String sql = OceanusSqlBuilder.instance(clazz).update(t, fields).build();
 
     List<Object> params = Lists.newArrayList((getFieldsValues(t, fields)));
@@ -189,6 +188,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
    */
   public void delete(String where, Object... values) throws Exception {
     checkNotNull(where, "where can not be null");
+    checkNotNull(values, "values can not be null");
     String sql = OceanusSqlBuilder.instance(clazz).delete().where(where).build();
     excuteUpdate(sql, values);
   }
@@ -205,7 +205,8 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
   public OceanusResult<T> pagination(String where, Pagination pgn, Object... values)
       throws Exception {
     checkNotNull(where, "where can not be null");
-    pgn = checkPgn(pgn);
+    checkNotNull(pgn, "pgn can not be null");
+    checkNotNull(values, "values can not be null");
 
     // list
     String sql = OceanusSqlBuilder.instance(clazz).select().where(where).pagination(pgn).build();
@@ -231,11 +232,15 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     String sql = OceanusSqlBuilder.instance(clazz).select().where(where).build();
     List<T> lst = excuteQuery(clazz, sql, values);
     if (lst.size() == 0) {
-    	String msg = String.format("Expected 1 but 0 found, where:%s,values:%s", where, Joiner.on(',').join(values));
+      String msg =
+          String.format("Expected 1 but 0 found, where:%s,values:%s", where,
+              Joiner.on(',').join(values));
       throw new OceanusNotFoundException(msg);
     } else if (lst.size() >= 2) {
-    	String msg = String.format("Expected 1 but %d found, where:%s,values:%s", lst.size(), where, Joiner.on(',').join(values));
-    	throw new OceanusDuplicateException(msg);
+      String msg =
+          String.format("Expected 1 but %d found, where:%s,values:%s", lst.size(), where, Joiner
+              .on(',').join(values));
+      throw new OceanusDuplicateException(msg);
     }
 
     return lst.get(0);
@@ -246,26 +251,19 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     return excuteCount(sql, values);
   }
 
-  protected Pagination checkPgn(Pagination pgn) {
-    return pgn != null ? pgn : new Pagination();
-  }
-
-  protected <E> boolean exists(List<E> lst) {
-    return lst.size() > 0;
-  }
-
   protected Object[] getFieldsValues(T t, String... fieldNames) throws IllegalAccessException,
       InvocationTargetException {
-    List<String> tmp = null;
-    if (fieldNames != null && fieldNames.length > 0) tmp = Arrays.asList(fieldNames);
+    List<String> fieldNamesLst = Arrays.asList(fieldNames);
 
     List<Object> params = Lists.newArrayList();
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
+      // 约定不更新或插入AutoIncrementId
       String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
-      if (name != null
-          && !(name.equalsIgnoreCase("id") || field.isAnnotationPresent(RowKey.class))) {
-        if (tmp != null && !tmp.contains(name)) continue;
-        // 约定不更新或插入Id
+      if (field.isAnnotationPresent(RowKey.class)) {
+        RowKey rk = field.getAnnotation(RowKey.class);
+        if (rk.autoIncrement()) continue;
+      }
+      if (fieldNamesLst.contains(name)) {
         Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
         params.add(method.invoke(t));
       }
@@ -280,25 +278,12 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
       }
     }
 
-    for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
-      if (field.getName().equals("id")) {
-        return "id";
-      }
-    }
-
     throw new OceanusSqlException("can not find identity column");
   }
 
   private Object getRowKeyFieldValue(T t) throws Exception {
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
       if (field.isAnnotationPresent(RowKey.class)) {
-        Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
-        return method.invoke(t);
-      }
-    }
-
-    for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
-      if (field.getName().equals("id")) {
         Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
         return method.invoke(t);
       }

@@ -23,7 +23,7 @@ public class OceanusSqlBuilder {
 
   private StringBuilder builder = new StringBuilder();
   private String tableName;
-  private String rowReyFieldName;
+  private String rowKeyFieldName;
   private List<String> names = Lists.newArrayList();
   private static Logger log = LoggerFactory.getLogger(OceanusSqlBuilder.class);
 
@@ -37,19 +37,19 @@ public class OceanusSqlBuilder {
 
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
       String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
-      // 约定不更新或插入Id
-      if (name != null
-          && !(name.equalsIgnoreCase("id") || field.isAnnotationPresent(RowKey.class))) {
-        names.add(name);
+      // 约定不更新或插入AutoIncrementId
+      if (field.isAnnotationPresent(RowKey.class)) {
+        RowKey rk = field.getAnnotation(RowKey.class);
+        if (rk.autoIncrement()) continue;
       }
+      names.add(name);
     }
 
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
       if (field.isAnnotationPresent(RowKey.class)) {
-        rowReyFieldName = field.getName();
+        rowKeyFieldName = field.getName();
       }
     }
-    if (rowReyFieldName == null) rowReyFieldName = "id"; // default
   }
 
   public static <T> OceanusSqlBuilder instance(Class<T> clazz) {
@@ -118,7 +118,7 @@ public class OceanusSqlBuilder {
       }
     }
     // where
-    builder.append(" where ").append(rowReyFieldName).append("=?");
+    builder.append(" where ").append(rowKeyFieldName).append("=?");
     builder.append(' ');
     return this;
   }
