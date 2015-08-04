@@ -6,9 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.bj58.oceanus.client.Oceanus;
 
 /**
@@ -18,9 +15,7 @@ import com.bj58.oceanus.client.Oceanus;
  *
  */
 public class BaseDaoEx extends BaseDao {
-
-  private static Logger log = LoggerFactory.getLogger(BaseDaoEx.class);
-
+  
   /**
    * Execute update and get generated key
    * 

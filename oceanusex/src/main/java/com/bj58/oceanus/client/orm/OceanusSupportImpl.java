@@ -66,7 +66,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     }
     where.deleteCharAt(where.length() - 1).append(")");
     Pagination pgn = new Pagination(1, id.length);
-    return pagination(where.toString(), pgn, id).getOceanusList();
+    return pagination(where.toString(), pgn, id).getList();
   }
 
   /**
@@ -258,11 +258,11 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     List<Object> params = Lists.newArrayList();
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
       // 约定不更新或插入AutoIncrementId
-      String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
       if (field.isAnnotationPresent(RowKey.class)) {
         RowKey rk = field.getAnnotation(RowKey.class);
         if (rk.autoIncrement()) continue;
       }
+      String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
       if (fieldNamesLst.contains(name)) {
         Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
         params.add(method.invoke(t));

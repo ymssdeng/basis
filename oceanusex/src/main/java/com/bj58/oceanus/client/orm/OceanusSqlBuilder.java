@@ -36,12 +36,12 @@ public class OceanusSqlBuilder {
     }
 
     for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
-      String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
       // 约定不更新或插入AutoIncrementId
       if (field.isAnnotationPresent(RowKey.class)) {
         RowKey rk = field.getAnnotation(RowKey.class);
         if (rk.autoIncrement()) continue;
       }
+      String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
       names.add(name);
     }
 

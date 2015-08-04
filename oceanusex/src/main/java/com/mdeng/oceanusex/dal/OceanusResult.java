@@ -14,7 +14,7 @@ public class OceanusResult<T extends OceanusEntity> {
 
   private int total = 0;
 
-  List<T> oceanusList = new ArrayList<T>();
+  List<T> list = new ArrayList<T>();
 
   public OceanusResult() {
 
@@ -22,7 +22,7 @@ public class OceanusResult<T extends OceanusEntity> {
 
   public OceanusResult(int total, List<T> lst) {
     this.total = total;
-    this.oceanusList = lst;
+    this.list = lst;
   }
 
   public int getTotal() {
@@ -33,12 +33,12 @@ public class OceanusResult<T extends OceanusEntity> {
     this.total = total;
   }
 
-  public List<T> getOceanusList() {
-    return oceanusList;
+  public List<T> getList() {
+    return list;
   }
 
-  public void setOceanusList(List<T> oceanusList) {
-    this.oceanusList = oceanusList;
+  public void setList(List<T> list) {
+    this.list = list;
   }
 
 }
