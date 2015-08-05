@@ -263,7 +263,7 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
         if (rk.autoIncrement()) continue;
       }
       String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
-      if (fieldNamesLst.contains(name)) {
+      if (fieldNamesLst.isEmpty() || fieldNamesLst.contains(name)) {
         Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
         params.add(method.invoke(t));
       }
