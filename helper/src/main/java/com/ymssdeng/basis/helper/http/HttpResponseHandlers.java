@@ -3,10 +3,13 @@ package com.ymssdeng.basis.helper.http;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.util.EntityUtils;
 
 import com.ymssdeng.basis.helper.utils.Jsons;
@@ -49,7 +52,16 @@ public final class HttpResponseHandlers {
 
     @Override
     public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-      return EntityUtils.toString(response.getEntity());
+      if (response.getEntity() == null) return null;
+      
+      Header headerEncode = response.getLastHeader("Content-Encoding");
+      if (null != headerEncode
+          && headerEncode.toString().equalsIgnoreCase("Content-Encoding: gzip")) {
+        // 解压
+        response.setEntity(new GzipDecompressingEntity(response.getEntity()));
+      }
+      HttpEntity entity = response.getEntity();
+      return EntityUtils.toString(entity, "utf-8");
     }
   }
 

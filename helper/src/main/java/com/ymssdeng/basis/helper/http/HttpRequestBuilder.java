@@ -30,8 +30,16 @@ public class HttpRequestBuilder {
     httpclient = HttpClients.createDefault();
   }
 
+  HttpRequestBuilder(CloseableHttpClient client) {
+    httpclient = client;
+  }
+  
   public static HttpRequestBuilder create() {
     return new HttpRequestBuilder();
+  }
+  
+  public static HttpRequestBuilder create(CloseableHttpClient client) {
+    return new HttpRequestBuilder(client);
   }
 
   public HttpRequestBuilder get(String url) {
@@ -53,7 +61,7 @@ public class HttpRequestBuilder {
     this.config = config;
     return this;
   }
-
+  
   public HttpRequestBuilder maxRetries(int maxRetries) {
     this.maxRetries = maxRetries;
     return this;
