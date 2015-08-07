@@ -1,4 +1,4 @@
-package com.mdeng.oceanusex.dal;
+package com.ymssdeng.oceanusex.dal;
 
 import java.util.ArrayList;
 import java.util.List;

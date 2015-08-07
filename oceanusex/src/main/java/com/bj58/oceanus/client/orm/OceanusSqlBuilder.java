@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.mdeng.oceanusex.dal.Pagination;
-import com.mdeng.oceanusex.dal.RowKey;
-import com.mdeng.oceanusex.dal.Table;
+import com.ymssdeng.oceanusex.dal.Pagination;
+import com.ymssdeng.oceanusex.dal.RowKey;
+import com.ymssdeng.oceanusex.dal.Table;
 
 /**
  * Simple SQL command builder

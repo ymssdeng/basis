@@ -1,4 +1,4 @@
-package com.mdeng.oceanusex.dal;
+package com.ymssdeng.oceanusex.dal;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
