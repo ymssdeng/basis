@@ -1,7 +1,5 @@
 package com.ymssdeng.basis.helper.http;
 
-import java.io.IOException;
-
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -87,9 +85,6 @@ public class HttpRequestBuilder {
         return t;
       } catch (Exception e) {} finally {
         method.releaseConnection();
-        try {
-          httpclient.close();
-        } catch (IOException e) {}
       }
     }
 
