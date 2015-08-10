@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+import com.bj58.oceanus.client.orm.entity.ClassInfo;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.ymssdeng.oceanusex.dal.DBField;
@@ -256,15 +257,21 @@ public class OceanusSupportImpl<T extends OceanusEntity> extends BaseDaoEx
     List<String> fieldNamesLst = Arrays.asList(fieldNames);
 
     List<Object> params = Lists.newArrayList();
-    for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
-      // 约定不更新或插入AutoIncrementId
-      if (field.isAnnotationPresent(RowKey.class)) {
-        RowKey rk = field.getAnnotation(RowKey.class);
-        if (rk.autoIncrement()) continue;
-      }
-      String name = MappingAnnotationUtil.getDBCloumnName(clazz, field);
-      if (fieldNamesLst.isEmpty() || fieldNamesLst.contains(name)) {
+    if (fieldNamesLst.isEmpty()) {
+      for (Field field : MappingAnnotationUtil.getAllFields(clazz)) {
+        // 约定不更新或插入AutoIncrementId
+        if (field.isAnnotationPresent(RowKey.class)) {
+          RowKey rk = field.getAnnotation(RowKey.class);
+          if (rk.autoIncrement()) continue;
+        }
         Method method = MappingAnnotationUtil.getGetterMethod(clazz, field);
+        params.add(method.invoke(t));
+      }
+    } else {
+      //注意顺序
+      for (String fname : fieldNamesLst) {
+        ClassInfo ci = MappingAnnotationUtil.getAllClassInfo().get(clazz);
+        Method method = ci.getMapGetMethod().get(fname);
         params.add(method.invoke(t));
       }
     }

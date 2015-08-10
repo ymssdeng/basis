@@ -105,7 +105,7 @@ public class OceanusSqlBuilder {
     int i = 0;
 
     List<String> tmp;
-    if (fields == null)
+    if (fields == null || fields.length == 0)
       tmp = names;
     else
       tmp = Arrays.asList(fields);
