@@ -1,4 +1,4 @@
-package com.ymssdeng.oceanusex.exceptions;
+package com.bj58.seo.oceanusex.exceptions;
 
 public class OceanusDuplicateException extends Exception {
   private static final long serialVersionUID = -691260359404054888L;

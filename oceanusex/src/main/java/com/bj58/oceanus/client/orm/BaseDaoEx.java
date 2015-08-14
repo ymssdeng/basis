@@ -15,7 +15,7 @@ import com.bj58.oceanus.client.Oceanus;
  *
  */
 public class BaseDaoEx extends BaseDao {
-  
+
   /**
    * Execute update and get generated key
    * 

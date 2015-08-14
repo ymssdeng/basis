@@ -10,17 +10,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.bj58.oceanus.client.orm.entity.ClassInfo;
+import com.bj58.seo.oceanusex.dal.DBField;
+import com.bj58.seo.oceanusex.dal.OceanusEntity;
+import com.bj58.seo.oceanusex.dal.OceanusResult;
+import com.bj58.seo.oceanusex.dal.Pagination;
+import com.bj58.seo.oceanusex.dal.RowKey;
+import com.bj58.seo.oceanusex.exceptions.OceanusDuplicateException;
+import com.bj58.seo.oceanusex.exceptions.OceanusNotFoundException;
+import com.bj58.seo.oceanusex.exceptions.OceanusSqlException;
+import com.bj58.seo.oceanusex.orm.OceanusSupport;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.ymssdeng.oceanusex.dal.DBField;
-import com.ymssdeng.oceanusex.dal.OceanusEntity;
-import com.ymssdeng.oceanusex.dal.OceanusResult;
-import com.ymssdeng.oceanusex.dal.Pagination;
-import com.ymssdeng.oceanusex.dal.RowKey;
-import com.ymssdeng.oceanusex.exceptions.OceanusDuplicateException;
-import com.ymssdeng.oceanusex.exceptions.OceanusNotFoundException;
-import com.ymssdeng.oceanusex.exceptions.OceanusSqlException;
-import com.ymssdeng.oceanusex.orm.OceanusSupport;
 
 /**
  * Base database access service

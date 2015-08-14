@@ -7,11 +7,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bj58.seo.oceanusex.dal.Pagination;
+import com.bj58.seo.oceanusex.dal.RowKey;
+import com.bj58.seo.oceanusex.dal.Table;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.ymssdeng.oceanusex.dal.Pagination;
-import com.ymssdeng.oceanusex.dal.RowKey;
-import com.ymssdeng.oceanusex.dal.Table;
 
 /**
  * Simple SQL command builder

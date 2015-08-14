@@ -1,4 +1,4 @@
-package com.ymssdeng.oceanusex.exceptions;
+package com.bj58.seo.oceanusex.exceptions;
 
 public class OceanusNotFoundException extends Exception {
   private static final long serialVersionUID = 9066658057127382806L;

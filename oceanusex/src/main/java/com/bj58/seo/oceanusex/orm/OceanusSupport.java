@@ -1,11 +1,11 @@
-package com.ymssdeng.oceanusex.orm;
+package com.bj58.seo.oceanusex.orm;
 
 import java.util.List;
 
-import com.ymssdeng.oceanusex.dal.DBField;
-import com.ymssdeng.oceanusex.dal.OceanusEntity;
-import com.ymssdeng.oceanusex.dal.OceanusResult;
-import com.ymssdeng.oceanusex.dal.Pagination;
+import com.bj58.seo.oceanusex.dal.DBField;
+import com.bj58.seo.oceanusex.dal.OceanusResult;
+import com.bj58.seo.oceanusex.dal.OceanusEntity;
+import com.bj58.seo.oceanusex.dal.Pagination;
 
 /**
  * Database access methods set

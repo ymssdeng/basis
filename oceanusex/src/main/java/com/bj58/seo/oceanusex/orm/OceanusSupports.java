@@ -1,11 +1,11 @@
-package com.ymssdeng.oceanusex.orm;
+package com.bj58.seo.oceanusex.orm;
 
 import java.util.Map;
 
 import com.bj58.oceanus.client.Oceanus;
 import com.bj58.oceanus.client.orm.OceanusSupportImpl;
+import com.bj58.seo.oceanusex.dal.OceanusEntity;
 import com.google.common.collect.Maps;
-import com.ymssdeng.oceanusex.dal.OceanusEntity;
 
 /**
  * Manage all singleton <code>OceanusSupport</code> interface instances

@@ -1,4 +1,4 @@
-package com.ymssdeng.basis.helper.http;
+package com.bj58.seo.core.http;
 
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
